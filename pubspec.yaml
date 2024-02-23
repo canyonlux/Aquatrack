@@ -55,7 +55,9 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-  - assets/images/aquatracklogo.webp
+  - assets/images/
+  - assets/03_009_fuentes_publicas_de_agua_potable (Provincial).json
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'LoginPage.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -75,16 +77,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
               padding: const EdgeInsets.only(top: 30.0),
               child: FloatingActionButton(
                 onPressed: () {
-                  // Aquí irá el código para navegar a la pantalla de login
-                  print('Navegando a la pantalla de login...');
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
                 },
-                child: Image.asset('assets/images/gota-agua.webp', width: 100 * 0.6, height: 100 * 0.6),
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16.0))
+                child: Image.asset('assets/images/gota-agua.webp', width: 100 , height: 100),
+                backgroundColor: Colors.red,
                 ),
               ),
-            ),
           ],
         ),
       ),
