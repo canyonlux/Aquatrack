@@ -32,7 +32,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
       vsync: this,
     )..repeat(reverse: true);
 
-    _animation = Tween<double>(begin: 50, end: 5).animate(_controller) //
+    _animation = Tween<double>(begin: 50, end: 5).animate(_controller)
       ..addListener(() {
         setState(() {});
       });
@@ -68,6 +68,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  // Aquí irá el código para navegar a la pantalla de login
+                  print('Navegando a la pantalla de login...');
+                },
+                child: Image.asset('assets/images/gota-agua.webp', width: 100 * 0.6, height: 100 * 0.6),
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0))
                 ),
               ),
             ),
