@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:h2orienta/MapPage.dart';
 import 'FuentesPage.dart';
 import 'RegisterPage.dart';
 import 'main.dart';
@@ -61,7 +62,7 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FuentesPage()),
+                      MaterialPageRoute(builder: (context) => MapPage()),
                     );
                   },
                   child: Text('Login'),
