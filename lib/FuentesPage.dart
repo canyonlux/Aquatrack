@@ -8,7 +8,7 @@ import 'FuenteDetailPage.dart';
 
 class FuentesPage extends StatelessWidget {
   Future<List<Fuente>> readJsonData() async {
-    final jsondata = await rootBundle.loadString('assets/03_009_fuentes_publicas_de_agua_potable (Provincial).json');
+    final jsondata = await rootBundle.loadString('assets/FuentesDeAgua_Almassora.json');
     final list = json.decode(jsondata) as List<dynamic>;
 
     return list.map((item) => Fuente.fromJson(item)).toList();

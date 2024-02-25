@@ -27,12 +27,13 @@ class MapPage extends StatelessWidget {
             label: 'Inicio',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Usuario',
+
+            icon: Icon(Icons.list),
+            label: 'Fuentes de Agua',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Fuentes',
+            icon: Icon(Icons.person),
+            label: 'Usuario',
           ),
         ],
         selectedItemColor: Color(0xFF0077B6), // Azul Principal para ítems seleccionados
@@ -43,10 +44,10 @@ class MapPage extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
               break;
             case 1:
-              Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfilePage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => FuentesPage()));
               break;
             case 2:
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FuentesPage()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfilePage()));
               break;
           }
         },
