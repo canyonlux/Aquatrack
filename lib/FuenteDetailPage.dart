@@ -8,6 +8,9 @@ class FuenteDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Asegúrate de que el nombre de la imagen esté en minúsculas y sin espacios ni caracteres especiales.
+    final imageName = fuente.municipio.split('(').last.trim().split(')').first.toLowerCase().replaceAll(' ', '_').replaceAll('á', 'a').replaceAll('é', 'e').replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u').replaceAll('ñ', 'n');
+
     return Scaffold(
       appBar: AppBar(
         title: Text(fuente.municipio),
@@ -19,6 +22,11 @@ class FuenteDetailPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              // Widget para mostrar la imagen
+              Center(
+                child: Image.asset('assets/images/$imageName.png', fit: BoxFit.cover),
+              ),
+              SizedBox(height: 20), // Espaciado
               _buildInfoRow('ID Cliente Eprinsa:', fuente.idClienteEprinsa),
               _buildInfoRow('Identificador:', fuente.identificador),
               _buildInfoRow('Dirección:', fuente.direccion),
