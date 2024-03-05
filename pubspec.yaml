@@ -34,9 +34,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter: ^2.1.1
+  flutter_map : ^4.0.0
   http: ^0.13.3
   json_annotation: ^4.4.1
+  latlong2: ^0.8.2
+
+
 
   cupertino_icons: ^1.0.2
 

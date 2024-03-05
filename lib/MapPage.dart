@@ -1,56 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'FuentesPage.dart';
 import 'UserProfilePage.dart';
-import 'main.dart'; // Asegúrate de tener esta página
 
-class MapPage extends StatelessWidget {
+class MapPage extends StatefulWidget {
+  @override
+  _MapPageState createState() => _MapPageState();
+}
+
+class _MapPageState extends State<MapPage> {
+  final TextEditingController _searchController = TextEditingController();
+  int _currentIndex = 0;
+
+  void _onItemTapped(int index) {
+    if (index == _currentIndex) return; // Evita recargar la misma página
+
+    setState(() {
+      _currentIndex = index;
+    });
+
+    switch (index) {
+      case 1:
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FuentesPage()));
+        break;
+      case 2:
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserProfilePage()));
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mapa de Fuentes'),
-        backgroundColor: Color(0xFF0077B6), // Azul Principal
+        backgroundColor: Color(0xFF0077B6),
+        title: Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: TextField(
+            controller: _searchController,
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.search, color: Colors.white),
+              hintText: 'Buscar fuentes disponibles...',
+              hintStyle: TextStyle(color: Colors.white),
+              border: InputBorder.none,
+            ),
+          ),
+        ),
       ),
-      body: Center(
-        child: Image.asset(
-          'assets/images/map.jpg',
-          height: 700,
-          width: 400,
-          fit: BoxFit.cover,
+      body: FlutterMap(
+        mapController: MapController(),
+        children: [
+          TileLayer(
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ['a', 'b', 'c'],
+          ),
+        ],
+        options: MapOptions(
+          center: LatLng(39.9263, -0.0515),
+          zoom: 13.0,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFFF1F1F1), // Fondo Gris claro
-        items: <BottomNavigationBarItem>[
+        currentIndex: _currentIndex,
+        onTap: _onItemTapped,
+        backgroundColor: Color(0xFF0077B6),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Inicio',
+            icon: Icon(Icons.map),
+            label: 'Mapa',
           ),
           BottomNavigationBarItem(
-
-            icon: Icon(Icons.list),
-            label: 'Fuentes de Agua',
+            icon: Icon(Icons.local_drink),
+            label: 'Fuentes',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Usuario',
+            label: 'Perfil',
           ),
         ],
-        selectedItemColor: Color(0xFF0077B6), // Azul Principal para ítems seleccionados
-        unselectedItemColor: Color(0xFF00B4D8), // Azul Secundario para ítems no seleccionados
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
-              break;
-            case 1:
-              Navigator.push(context, MaterialPageRoute(builder: (context) => FuentesPage()));
-              break;
-            case 2:
-              Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfilePage()));
-              break;
-          }
-        },
       ),
     );
   }
