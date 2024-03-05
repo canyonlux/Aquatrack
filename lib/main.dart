@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'LoginPage.dart';
+import 'LoginPage.dart'; // Asegúrate de tener esta página correctamente configurada
 
 void main() {
   runApp(MyApp());
@@ -12,16 +14,51 @@ class MyApp extends StatelessWidget {
       title: 'AquaTrack',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Color(0xFF0077B6), // Azul Principal
-        hintColor: Color(0xFF90E0EF), // Color de Acento
-        fontFamily: 'Roboto', // Fuente predeterminada
+        primaryColor: Color(0xFF0077B6),
+        hintColor: Color(0xFF90E0EF),
+        fontFamily: 'Roboto',
       ),
       home: WelcomeScreen(),
     );
   }
 }
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
+  @override
+  _WelcomeScreenState createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 3), () => _navigateToLogin());
+  }
+
+  void _navigateToLogin() {
+    Navigator.of(context).pushReplacement(_createRoute());
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = 0.0;
+        const end = 1.0;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var fadeAnimation = animation.drive(tween);
+
+        return FadeTransition(
+          opacity: fadeAnimation,
+          child: child,
+        );
+      },
+      transitionDuration: Duration(seconds: 2),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,32 +78,7 @@ class WelcomeScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
-                  color: Color(0xFFFFFFFF), // Texto Blanco
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 50,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
-                },
-                child: Text(
-                  'INICIO',
-                  style: TextStyle(
-                    color: Colors.white, // Texto en blanco
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xFF00B4D8), // Azul Secundario para botones
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // Bordes redondeados
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15), // Espaciado interno
+                  color: Color(0xFFFFFFFF),
                 ),
               ),
             ),
