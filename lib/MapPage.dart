@@ -69,13 +69,18 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       _currentIndex = index;
     });
-
     switch (index) {
       case 1:
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => FuentesPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FuentesPage()),
+        );
         break;
       case 2:
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserProfilePage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => UserProfilePage()),
+        );
         break;
     }
   }

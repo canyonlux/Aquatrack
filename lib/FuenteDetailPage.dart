@@ -8,6 +8,8 @@ class FuenteDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtener la altura total de la pantalla
+    final screenHeight = MediaQuery.of(context).size.height;
     // Asegúrate de que el nombre de la imagen esté en minúsculas y sin espacios ni caracteres especiales.
     final imageName = fuente.municipio.split('(').last.trim().split(')').first.toLowerCase().replaceAll(' ', '_').replaceAll('á', 'a').replaceAll('é', 'e').replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u').replaceAll('ñ', 'n');
 
@@ -24,7 +26,16 @@ class FuenteDetailPage extends StatelessWidget {
             children: <Widget>[
               // Widget para mostrar la imagen
               Center(
-                child: Image.asset('assets/images/$imageName.png', fit: BoxFit.cover),
+                child: Container(
+                  height: screenHeight / 2, // Usar la mitad de la altura de la pantalla para la imagen
+                  width: double.infinity, // Que ocupe todo el ancho posible
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/$imageName.png'),
+                      fit: BoxFit.cover, // Esto asegura que la imagen cubra el espacio asignado
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 20), // Espaciado
               _buildInfoRow('ID Cliente Eprinsa:', fuente.idClienteEprinsa),
