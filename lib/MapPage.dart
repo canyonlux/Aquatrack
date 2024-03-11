@@ -17,6 +17,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   List<Fuente> _fuentes = [];
   List<Fuente> _fuentesFiltradas = [];
+  List<Marker> _markers = [];
   final TextEditingController _searchController = TextEditingController();
   int _currentIndex = 0;
   final MapController _mapController = MapController();
@@ -33,6 +34,14 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       _fuentes = list.map((item) => Fuente.fromJson(item)).toList();
       _fuentesFiltradas = _fuentes;
+      _markers = _fuentes.map((fuente) => Marker(
+        width: 80.0,
+        height: 80.0,
+        point: LatLng(double.parse(fuente.coordenadaX), double.parse(fuente.coordenadaY)),
+        builder: (ctx) => Container(
+          child: Icon(Icons.location_on, color: Colors.red),
+        ),
+      )).toList();
     });
   }
 
@@ -110,18 +119,23 @@ class _MapPageState extends State<MapPage> {
       )
       : FlutterMap(
         mapController: _mapController,
+        options: MapOptions(
+          center: LatLng(39.9263, -0.0515), // Ajusta según sea necesario
+          zoom: 13.0,
+        ),
         children: [
           TileLayer(
             urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             subdomains: ['a', 'b', 'c'],
           ),
+          MarkerLayer(
+            markers: _markers,
+          )
         ],
-        options: MapOptions(
-          center: LatLng(39.9263, -0.0515),
-          zoom: 13.0,
-        ),
-      ),
-        floatingActionButton: Column(
+      )
+      ,
+
+      floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
