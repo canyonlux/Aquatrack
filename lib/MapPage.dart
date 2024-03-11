@@ -38,8 +38,13 @@ class _MapPageState extends State<MapPage> {
         width: 80.0,
         height: 80.0,
         point: LatLng(double.parse(fuente.coordenadaX), double.parse(fuente.coordenadaY)),
-        builder: (ctx) => Container(
-          child: Icon(Icons.location_on, color: Colors.red),
+        builder: (ctx) => GestureDetector(
+          onTap: () {
+            Navigator.of(ctx).push(MaterialPageRoute(builder: (context) => FuenteDetailPage(fuente: fuente)));
+          },
+          child: Container(
+            child: Icon(Icons.water_drop, color: Colors.blue),
+          ),
         ),
       )).toList();
     });
