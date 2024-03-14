@@ -1,1 +1,1 @@
-#pega aqui en .env
+#pega aqui .env
