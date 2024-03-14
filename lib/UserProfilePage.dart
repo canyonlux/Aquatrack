@@ -1,6 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserProfilePage extends StatelessWidget {
+  final String username;
+  UserProfilePage({Key? key, required this.username}) : super(key: key);
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +32,7 @@ class UserProfilePage extends StatelessWidget {
               SizedBox(height: 50),
               // Nombre del usuario
               Text(
-                'Nombre de Usuario',
+                username,
                 style: TextStyle(
                   fontSize: 22,
                   color: Color(0xFF333333), // Texto Gris oscuro

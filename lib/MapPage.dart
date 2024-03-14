@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:diacritic/diacritic.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -12,6 +13,9 @@ import 'UserProfilePage.dart';
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
+}
+String getUsernameFromEmail(String email) {
+  return email.split('@').first;
 }
 
 class _MapPageState extends State<MapPage> {
@@ -77,9 +81,12 @@ class _MapPageState extends State<MapPage> {
         );
         break;
       case 2:
+        final username = getUsernameFromEmail(FirebaseAuth.instance.currentUser?.email ?? '');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => UserProfilePage()),
+          MaterialPageRoute(
+            builder: (context) => UserProfilePage(username: username),
+          ),
         );
         break;
     }
