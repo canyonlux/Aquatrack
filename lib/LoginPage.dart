@@ -1,9 +1,47 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:h2orienta/MapPage.dart';
 import 'RegisterPage.dart';
 import 'main.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+  Future<void> _login() async {
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      await _auth.signInWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+
+      // Navegar a la página principal (MapPage) después del inicio de sesión exitoso
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MapPage()),
+      );
+    } on FirebaseAuthException catch (e) {
+      // Mostrar mensaje de error al usuario
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "Ocurrió un error al iniciar sesión."),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +55,8 @@ class LoginPage extends StatelessWidget {
         ),
         backgroundColor: Color(0xFF0077B6), // Azul Principal para AppBar
       ),
-      body: Padding(
+      body: SingleChildScrollView(
+        child:Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -30,61 +69,50 @@ class LoginPage extends StatelessWidget {
                 height: 150,
               ),
             ),
-            // Campo de texto para el nombre de usuario
+            // Campo de texto para el email/usuario
             TextField(
+              controller: _emailController,
               decoration: InputDecoration(
                 labelText: 'Usuario',
-                labelStyle: TextStyle(color: Color(0xFF333333)), // Texto Gris oscuro
-                icon: Icon(Icons.person, color: Color(0xFF0077B6)), // Icono Azul Principal
+                // Resto de la configuración del TextField
               ),
             ),
             SizedBox(height: 20), // Espaciador
             // Campo de texto para la contraseña
             TextField(
+              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Contraseña',
-                labelStyle: TextStyle(color: Color(0xFF333333)), // Texto Gris oscuro
-                icon: Icon(Icons.lock, color: Color(0xFF0077B6)), // Icono Azul Principal
+                // Resto de la configuración del TextField
               ),
             ),
             SizedBox(height: 20), // Espaciador
-            // Botones
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildButton(context, 'Back', MyApp()),
-                _buildButton(context, 'Login', MapPage()),
-                _buildButton(context, 'Register', RegisterPage()),
-              ],
+            // Botón de inicio de sesión
+            ElevatedButton(
+              onPressed: _login, // Actualizado para llamar a _login
+              child: Text('Iniciar Sesión', style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF00B4D8), // Azul Secundario para botones
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              ),
+            ),
+            SizedBox(height: 20), // Espaciador
+            // Botón para navegar al registro
+            ElevatedButton(
+              onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterPage())),
+              child: Text('Registrar', style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFF0077B6), // Azul Principal
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              ),
             ),
           ],
         ),
       ),
+      ),
       backgroundColor: Color(0xFFF1F1F1), // Fondo Gris claro
     );
-  }
 
-  Widget _buildButton(BuildContext context, String text, Widget page) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
-        );
-      },
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white, // Texto en blanco
-        ),
-      ),
-      style: ElevatedButton.styleFrom(
-        primary: Color(0xFF00B4D8), // Azul Secundario para botones
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30), // Bordes redondeados
-        ),
-      ),
-    );
   }
 }

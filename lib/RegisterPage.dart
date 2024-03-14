@@ -67,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
             children: [
               Image.asset('assets/images/registerimage.jpg', height: 250,),
               SizedBox(height: 20),
-              _buildTextField(_emailController, Icons.email, 'Correo Electrónico'),
+              _buildTextField(_emailController, Icons.email, 'Usuario'),
               SizedBox(height: 20),
               _buildTextField(_passwordController, Icons.lock, 'Contraseña', isPassword: true),
               SizedBox(height: 20),
