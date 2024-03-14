@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "772928444351",
+    "project_id": "aquatrack-a9b48",
+    "storage_bucket": "aquatrack-a9b48.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:772928444351:android:c17797763eecd6b427730a",
+        "android_client_info": {
+          "package_name": "com.example.h2orienta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaxfjfKWoPeqmwn9XwX5c2jj_mZztPCx4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,9 +1,15 @@
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'LoginPage.dart'; // Asegúrate de tener esta página correctamente configurada
+import 'LoginPage.dart';
+import 'firebase_options.dart'; // Asegúrate de tener esta página correctamente configurada
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 

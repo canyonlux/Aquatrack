@@ -1,54 +1,48 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:h2orienta/LoginPage.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register Page'),
-        backgroundColor: Color(0xFF0077B6), // Azul Principal para AppBar
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Imagen en la parte superior
-            Image.asset(
-              'assets/images/registerimage.jpg', // Asegúrate de que esta imagen esté en tu carpeta de assets
-              height: 250,
-            ),
-            SizedBox(height: 20), // Espaciador
-            // Campo de texto para el nombre
-            _buildTextField(Icons.person_outline, 'Nombre'),
-            SizedBox(height: 20), // Espaciador
-            // Campo de texto para los apellidos
-            _buildTextField(Icons.person_outline, 'Apellidos'),
-            SizedBox(height: 20), // Espaciador
-            // Campo de texto para el usuario
-            _buildTextField(Icons.person, 'Usuario'),
-            SizedBox(height: 20), // Espaciador
-            // Campo de texto para la contraseña
-            _buildTextField(Icons.lock, 'Contraseña', isPassword: true),
-            SizedBox(height: 20), // Espaciador
-            // Botones
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildButton(context, 'Create Account', LoginPage()),
-                _buildButton(context, 'Cancelar', LoginPage()),
-              ],
-            ),
-          ],
-        ),
-      ),
-      backgroundColor: Color(0xFFF1F1F1), // Fondo Gris claro
-    );
+  _RegisterPageState createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
-  Widget _buildTextField(IconData icon, String label, {bool isPassword = false}) {
+  Future<void> _registerAccount() async {
+    try {
+      final FirebaseAuth _auth = FirebaseAuth.instance;
+      await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      // Navega hacia la página de login después de registrar
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    } on FirebaseAuthException catch (e) {
+      // Mostrar mensaje de error al usuario
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "Ocurrió un error al registrar el usuario."),
+        ),
+      );
+    }
+  }
+
+  Widget _buildTextField(TextEditingController controller, IconData icon, String label, {bool isPassword = false}) {
     return TextField(
+      controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
         labelText: label,
@@ -58,26 +52,46 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  Widget _buildButton(BuildContext context, String text, Widget page) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => page),
-        );
-      },
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.white, // Texto en blanco
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Register Page'),
+        backgroundColor: Color(0xFF0077B6), // Azul Principal para AppBar
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView( // Para evitar overflow al abrir el teclado
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset('assets/images/registerimage.jpg', height: 250,),
+              SizedBox(height: 20),
+              _buildTextField(_emailController, Icons.email, 'Correo Electrónico'),
+              SizedBox(height: 20),
+              _buildTextField(_passwordController, Icons.lock, 'Contraseña', isPassword: true),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _registerAccount, // Actualizado para llamar a _registerAccount
+                child: Text('Crear Cuenta', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF00B4D8), // Azul Secundario para botones
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage())),
+                child: Text('Cancelar', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0077B6), // Azul Principal
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      style: ElevatedButton.styleFrom(
-        primary: Color(0xFF00B4D8), // Azul Secundario para botones
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30), // Bordes redondeados
-        ),
-      ),
+      backgroundColor: Color(0xFFF1F1F1), // Fondo Gris claro
     );
   }
 }
