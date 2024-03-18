@@ -1,31 +1,76 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'Fuente.dart';
 
-class FuenteDetailPage extends StatelessWidget {
+// Convertir en StatefulWidget
+class FuenteDetailPage extends StatefulWidget {
   final Fuente fuente;
 
   FuenteDetailPage({required this.fuente});
 
-  // Método para añadir la fuente a los favoritos
-  void _addFavorite(BuildContext context) async {
+  @override
+  _FuenteDetailPageState createState() => _FuenteDetailPageState();
+}
+
+class _FuenteDetailPageState extends State<FuenteDetailPage> {
+  bool _isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFavoriteStatus();
+  }
+
+  Future<void> _checkFavoriteStatus() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       DocumentReference favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
-      favoritesRef.set({
-        'fuentes': FieldValue.arrayUnion([fuente.identificador])
-      }, SetOptions(merge: true)).then((_) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Añadido a favoritos'),
-        ));
-      }).catchError((e) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Error al añadir a favoritos'),
-        ));
-      });
+      var doc = await favoritesRef.get();
+      if (doc.exists && (doc.data() as Map<String, dynamic>)['fuentes'].contains(widget.fuente.identificador)) {
+        setState(() {
+          _isFavorite = true;
+        });
+      }
     }
   }
+
+  void _toggleFavorite(BuildContext context) async {
+    final User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Necesitas estar logueado para agregar a favoritos')));
+      return;
+    }
+
+    final DocumentReference favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
+
+    FirebaseFirestore.instance.runTransaction((transaction) async {
+      final DocumentSnapshot txSnapshot = await transaction.get(favoritesRef);
+
+      if (!txSnapshot.exists) {
+        throw Exception("El documento no existe!");
+      }
+
+      // Asegúrate de manejar correctamente los datos como un Map<String, dynamic>
+      final data = txSnapshot.data() as Map<String, dynamic>;
+      List<dynamic> fuentes = data['fuentes'] ?? [];
+      if (fuentes.contains(widget.fuente.identificador)) {
+        // Si la fuente ya está en favoritos, la eliminamos
+        transaction.update(favoritesRef, {'fuentes': FieldValue.arrayRemove([widget.fuente.identificador])});
+        setState(() => _isFavorite = false);
+      } else {
+        // Si la fuente no está en favoritos, la añadimos
+        transaction.update(favoritesRef, {'fuentes': FieldValue.arrayUnion([widget.fuente.identificador])});
+        setState(() => _isFavorite = true);
+      }
+    }).then((result) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_isFavorite ? 'Añadido a favoritos' : 'Eliminado de favoritos')));
+    }).catchError((error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al actualizar favoritos')));
+    });
+  }
+
+
 
 
   @override
@@ -33,16 +78,16 @@ class FuenteDetailPage extends StatelessWidget {
     // Obtener la altura total de la pantalla
     final screenHeight = MediaQuery.of(context).size.height;
     // Asegúrate de que el nombre de la imagen esté en minúsculas y sin espacios ni caracteres especiales.
-    final imageName = fuente.municipio.split('(').last.trim().split(')').first.toLowerCase().replaceAll(' ', '_').replaceAll('á', 'a').replaceAll('é', 'e').replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u').replaceAll('ñ', 'n');
+    final imageName = widget.fuente.municipio.split('(').last.trim().split(')').first.toLowerCase().replaceAll(' ', '_').replaceAll('á', 'a').replaceAll('é', 'e').replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u').replaceAll('ñ', 'n');
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(fuente.municipio),
+        title: Text(widget.fuente.municipio),
         backgroundColor: Color(0xFF0077B6), // Azul Principal
-          actions: [
-      IconButton(
-      icon: Icon(Icons.star_border), // Cambiar por icono lleno si ya está en favoritos
-      onPressed: () => _addFavorite(context),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(_isFavorite ? Icons.star : Icons.star_border),
+            onPressed: () => _toggleFavorite(context),
       ),
       ],
       ),
@@ -66,15 +111,15 @@ class FuenteDetailPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20), // Espaciado
-              _buildInfoRow('ID Cliente Eprinsa:', fuente.idClienteEprinsa),
-              _buildInfoRow('Identificador:', fuente.identificador),
-              _buildInfoRow('Dirección:', fuente.direccion),
-              _buildInfoRow('Coordenadas:', '${fuente.coordenadaX}, ${fuente.coordenadaY}'),
-              _buildInfoRow('Zona:', fuente.zona),
-              _buildInfoRow('Estado:', fuente.estado),
-              _buildInfoRow('Fecha de Revisión:', fuente.fechaRevision),
-              _buildInfoRow('Bebedero para Mascotas:', fuente.bebederoMascotas),
-              _buildInfoRow('Municipio:', fuente.municipio),
+              _buildInfoRow('ID Cliente Eprinsa:', widget.fuente.idClienteEprinsa),
+              _buildInfoRow('Identificador:', widget.fuente.identificador),
+              _buildInfoRow('Dirección:', widget.fuente.direccion),
+              _buildInfoRow('Coordenadas:', '${widget.fuente.coordenadaX}, ${widget.fuente.coordenadaY}'),
+              _buildInfoRow('Zona:', widget.fuente.zona),
+              _buildInfoRow('Estado:', widget.fuente.estado),
+              _buildInfoRow('Fecha de Revisión:', widget.fuente.fechaRevision),
+              _buildInfoRow('Bebedero para Mascotas:', widget.fuente.bebederoMascotas),
+              _buildInfoRow('Municipio:', widget.fuente.municipio),
             ],
           ),
         ),

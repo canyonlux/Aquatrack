@@ -1,15 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'Fuente.dart';
+import 'FuentesFavoritasPage.dart';
 
 class UserProfilePage extends StatelessWidget {
   final String username;
   UserProfilePage({Key? key, required this.username}) : super(key: key);
 
+  Future<List<Fuente>> getFuentesFavoritas() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return [];
 
+    final favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
+    final docSnapshot = await favoritesRef.get();
+    final List<dynamic> favoritasIds = docSnapshot.data()?['fuentes'] ?? [];
 
+    List<Fuente> fuentesFavoritas = [];
 
+    for (String id in favoritasIds) {
+      // Asume que tienes una función que puede obtener los datos de una fuente por su ID
+      // Aquí deberías recuperar los datos de Firestore basándote en el ID y luego
+      // construir un objeto Fuente a partir de esos datos
+    }
 
-
+    return fuentesFavoritas;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +85,14 @@ class UserProfilePage extends StatelessWidget {
   Widget _buildButton(BuildContext context, String text, IconData icon) {
     return ElevatedButton.icon(
       onPressed: () {
-        // Implementar acción del botón en el futuro
+        if (text == "Fuentes Favoritas") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => FuentesFavoritasPage()),
+          );
+        } else {
+          // Aquí irían las demás condiciones para los otros botones
+        }
       },
       icon: Icon(icon, color: Colors.white),
       label: Text(
