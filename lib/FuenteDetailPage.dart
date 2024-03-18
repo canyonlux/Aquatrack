@@ -54,13 +54,13 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
       // Asegúrate de manejar correctamente los datos como un Map<String, dynamic>
       final data = txSnapshot.data() as Map<String, dynamic>;
       List<dynamic> fuentes = data['fuentes'] ?? [];
-      if (fuentes.contains(widget.fuente.identificador)) {
+      if (fuentes.contains(widget.fuente.direccion)) {
         // Si la fuente ya está en favoritos, la eliminamos
-        transaction.update(favoritesRef, {'fuentes': FieldValue.arrayRemove([widget.fuente.identificador])});
+        transaction.update(favoritesRef, {'fuentes': FieldValue.arrayRemove([widget.fuente.direccion])});
         setState(() => _isFavorite = false);
       } else {
         // Si la fuente no está en favoritos, la añadimos
-        transaction.update(favoritesRef, {'fuentes': FieldValue.arrayUnion([widget.fuente.identificador])});
+        transaction.update(favoritesRef, {'fuentes': FieldValue.arrayUnion([widget.fuente.direccion ])});
         setState(() => _isFavorite = true);
       }
     }).then((result) {
