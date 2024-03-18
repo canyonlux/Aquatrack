@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Fuente.dart';
 
@@ -5,6 +7,26 @@ class FuenteDetailPage extends StatelessWidget {
   final Fuente fuente;
 
   FuenteDetailPage({required this.fuente});
+
+  // Método para añadir la fuente a los favoritos
+  void _addFavorite(BuildContext context) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      DocumentReference favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
+      favoritesRef.set({
+        'fuentes': FieldValue.arrayUnion([fuente.identificador])
+      }, SetOptions(merge: true)).then((_) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Añadido a favoritos'),
+        ));
+      }).catchError((e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Error al añadir a favoritos'),
+        ));
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +39,12 @@ class FuenteDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(fuente.municipio),
         backgroundColor: Color(0xFF0077B6), // Azul Principal
+          actions: [
+      IconButton(
+      icon: Icon(Icons.star_border), // Cambiar por icono lleno si ya está en favoritos
+      onPressed: () => _addFavorite(context),
+      ),
+      ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
