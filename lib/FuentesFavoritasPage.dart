@@ -1,75 +1,111 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'Fuente.dart'; // Asegúrate de que este import apunta al archivo correcto donde se define la clase Fuente.
 
-import 'Fuente.dart';
+class FuentesFavoritasPage extends StatefulWidget {
+  @override
+  _FuentesFavoritasPageState createState() => _FuentesFavoritasPageState();
+}
 
-class FuentesFavoritasPage extends StatelessWidget {
-
-  Future<Fuente?> fetchFuenteById(String id) async {
-    try {
-      // Asume que cada fuente está en una colección llamada 'fuentes' y su ID es el identificador del documento
-      DocumentSnapshot docSnapshot = await FirebaseFirestore.instance.collection('fuentes').doc(id).get();
-
-      if (!docSnapshot.exists) {
-        return null;
-      }
-
-      // Asume que tus documentos de fuente tienen una estructura que coincide con tu clase Fuente
-      return Fuente.fromJson(docSnapshot.data() as Map<String, dynamic>);
-    } catch (e) {
-      print("Error al obtener fuente por ID: $e");
-      return null;
-    }
-  }
-
-  Future<List<Fuente>> getFuentesFavoritas() async {
+class _FuentesFavoritasPageState extends State<FuentesFavoritasPage> {
+  // Recupera las direcciones de las fuentes favoritas del usuario actual
+  Future<List<String>> getFuentesFavoritasDirecciones() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) throw Exception('Usuario no logueado');
 
-    final favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
-    final docSnapshot = await favoritesRef.get();
+    final docSnapshot = await FirebaseFirestore.instance
+        .collection('favoritos')
+        .doc(user.uid)
+        .get();
 
     if (!docSnapshot.exists) return [];
 
-    final data = docSnapshot.data() as Map<String, dynamic>; // Castear correctamente
-    final favoriteIds = data['fuentes'] as List<dynamic> ?? [];
-
-    List<Future<Fuente?>> futureFuentes = favoriteIds.map((id) => fetchFuenteById(id.toString())).toList();
-    List<Fuente> favoriteFuentes = (await Future.wait(futureFuentes)).whereType<Fuente>().toList();
-
-    return favoriteFuentes;
+    final direcciones = List.from(docSnapshot.data()?['fuentes'] ?? []);
+    return direcciones.cast<String>();
   }
 
+  // Recupera los objetos Fuente basados en las direcciones
+  Future<List<Fuente?>> getFuentesFavoritas() async {
+    final direcciones = await getFuentesFavoritasDirecciones();
+    return await fetchFuentesPorDireccion(direcciones);
+  }
+
+  // Busca en Firestore las fuentes por dirección
+  Future<List<Fuente?>> fetchFuentesPorDireccion(List<String> direcciones) async {
+    List<Fuente?> fuentes = [];
+    for (String direccion in direcciones) {
+      var direccionNormalizada = direccion.toLowerCase().replaceAll(RegExp(r'[^a-z0-9 ]'), '');
+      var querySnapshot = await FirebaseFirestore.instance
+          .collection('fuentes')
+          .where('direccion', isEqualTo: direccionNormalizada)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        var doc = querySnapshot.docs.first;
+        fuentes.add(Fuente.fromJson(doc.data() as Map<String, dynamic>));
+      } else {
+        print("No se encontró el documento con dirección: $direccion");
+        fuentes.add(null);
+      }
+    }
+    return fuentes;
+  }
+
+  // Construye la UI de la página
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Fuentes Favoritas'),
+        backgroundColor: Color(0xFF0077B6),
       ),
-      body: FutureBuilder<List<Fuente>>(
-        future: getFuentesFavoritas(), // Asegúrate de implementar esta función
+      body: FutureBuilder<List<Fuente?>>(
+        future: getFuentesFavoritas(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.error != null || !snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No tienes fuentes favoritas aún'));
+            return Center(child: Text('No tienes fuentes favoritas aún.'));
           }
 
-          List<Fuente> fuentesFavoritas = snapshot.data!;
+          var fuentesFavoritas = snapshot.data!;
           return ListView.builder(
             itemCount: fuentesFavoritas.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(fuentesFavoritas[index].identificador),
-                // Añade aquí más propiedades y un onTap si es necesario
-              );
+              var fuente = fuentesFavoritas[index];
+              if (fuente != null) {
+                return buildFuenteCard(context, fuente);
+              } else {
+                return ListTile(
+                  title: Text('Fuente no encontrada'),
+                );
+              }
             },
           );
         },
+      ),
+    );
+  }
+
+
+  Widget buildFuenteCard(BuildContext context, Fuente fuente) {
+    final imageName = fuente.direccion.toLowerCase().replaceAll(' ', '_').replaceAll('á', 'a').replaceAll('é', 'e').replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u').replaceAll('ñ', 'n');
+
+    return Card(
+      clipBehavior: Clip.antiAlias, // Para dar un efecto visual más pulido
+      child: Column(
+        children: <Widget>[
+          Image.asset('assets/images/$imageName.png', height: 200, fit: BoxFit.cover), // Asegúrate de que las imágenes estén disponibles
+          ListTile(
+            title: Text(fuente.direccion),
+            subtitle: Text(fuente.direccion),
+            onTap: () {
+              // Aquí podrías implementar la navegación a la página de detalles de la fuente
+            },
+          ),
+        ],
       ),
     );
   }
