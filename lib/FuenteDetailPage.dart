@@ -38,7 +38,8 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
   void _toggleFavorite(BuildContext context) async {
     final User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Necesitas estar logueado para agregar a favoritos')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Necesitas estar logueado para agregar a favoritos'),
+          backgroundColor: Color(0xFF0077B6),));
       return;
     }
 
@@ -64,9 +65,15 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
         setState(() => _isFavorite = true);
       }
     }).then((result) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_isFavorite ? 'Añadido a favoritos' : 'Eliminado de favoritos')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(_isFavorite ? 'Añadido a favoritos' : 'Eliminado de favoritos'),
+        backgroundColor: Color(0xFF0077B6), // Azul Principal para el fondo del SnackBar
+      ));
     }).catchError((error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al actualizar favoritos')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Error al actualizar favoritos'),
+        backgroundColor: Color(0xFF0077B6), // Azul Principal para el fondo del SnackBar
+      ));
     });
   }
 
@@ -88,7 +95,9 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
           IconButton(
             icon: Icon(_isFavorite ? Icons.star : Icons.star_border),
             onPressed: () => _toggleFavorite(context),
-      ),
+            color: Colors.amber, // Color Dorado para la estrella
+            iconSize: 30, // Tamaño más grande para la estrella
+          ),
       ],
       ),
       body: Padding(
@@ -111,13 +120,10 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
                 ),
               ),
               SizedBox(height: 20), // Espaciado
-              _buildInfoRow('ID Cliente Eprinsa:', widget.fuente.idClienteEprinsa),
-              _buildInfoRow('Identificador:', widget.fuente.identificador),
               _buildInfoRow('Dirección:', widget.fuente.direccion),
               _buildInfoRow('Coordenadas:', '${widget.fuente.coordenadaX}, ${widget.fuente.coordenadaY}'),
               _buildInfoRow('Zona:', widget.fuente.zona),
               _buildInfoRow('Estado:', widget.fuente.estado),
-              _buildInfoRow('Fecha de Revisión:', widget.fuente.fechaRevision),
               _buildInfoRow('Bebedero para Mascotas:', widget.fuente.bebederoMascotas),
               _buildInfoRow('Municipio:', widget.fuente.municipio),
             ],

@@ -31,25 +31,28 @@ class _FuentesFavoritasPageState extends State<FuentesFavoritasPage> {
     return await fetchFuentesPorDireccion(direcciones);
   }
 
-  // Busca en Firestore las fuentes por dirección
   Future<List<Fuente?>> fetchFuentesPorDireccion(List<String> direcciones) async {
     List<Fuente?> fuentes = [];
+
     for (String direccion in direcciones) {
-      var direccionNormalizada = direccion.toLowerCase().replaceAll(RegExp(r'[^a-z0-9 ]'), '');
+      // Suponiendo que cada 'direccion' es un identificador único de una fuente
       var querySnapshot = await FirebaseFirestore.instance
           .collection('fuentes')
-          .where('direccion', isEqualTo: direccionNormalizada)
+          .where(FieldPath.documentId, isEqualTo: direccion)
           .get();
+
       if (querySnapshot.docs.isNotEmpty) {
         var doc = querySnapshot.docs.first;
         fuentes.add(Fuente.fromJson(doc.data() as Map<String, dynamic>));
       } else {
-        print("No se encontró el documento con dirección: $direccion");
+        print("No se encontró la fuente con identificador: $direccion");
         fuentes.add(null);
       }
     }
+
     return fuentes;
   }
+
 
   // Construye la UI de la página
   @override
