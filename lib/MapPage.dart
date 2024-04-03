@@ -138,7 +138,7 @@ class _MapPageState extends State<MapPage> {
         mapController: _mapController,
         options: MapOptions(
           center: LatLng(39.9263, -0.0515), // Ajusta según sea necesario
-          zoom: 13.0,
+          zoom: 10.0,
         ),
         children: [
           TileLayer(

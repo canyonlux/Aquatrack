@@ -1,5 +1,0 @@
-//pega aqu .env
-
-
-
-

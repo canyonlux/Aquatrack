@@ -116,118 +116,118 @@
     },
     {
         "idClienteEprinsa": "24",
-        "Identificador": "almassora.opendata.h2o.fuentes.1000",
-        "Direccion": "Carrer d'Enric Valor",
-        "CoordenadaX": "39.952622",
-        "CoordenadaY": "-0.059928",
+        "Identificador": "almassora.opendata.h2o.fuentes.1023",
+        "Direccion": "Av. Francesc Tarrega",
+        "CoordenadaX": "39.944003",
+        "CoordenadaY": "-0.090226",
         "Zona": "Zona Norte",
         "Estado": "REGULAR",
         "FechaRevision": "",
         "BebederoMascotas": "SÍ",
-        "Municipio": "Almassora (Víctimas del Terrorismo)"
+        "Municipio": "Vilareal"
     },
     {
         "idClienteEprinsa": "25",
-        "Identificador": "almassora.opendata.h2o.fuentes.1001",
-        "Direccion": "Plaza Todos los Santos",
-        "CoordenadaX": "39.955368",
-        "CoordenadaY": "-0.068050",
+        "Identificador": "almassora.opendata.h2o.fuentes.1024",
+        "Direccion": "Ronda este,31",
+        "CoordenadaX": "39.981470",
+        "CoordenadaY": "-0.025927",
         "Zona": "Zona Oeste",
         "Estado": "BUENO",
         "FechaRevision": "2024-02-25",
         "BebederoMascotas": "NO",
-        "Municipio": "Almassora (Grupo B)"
+        "Municipio": "Castellon"
     },
 
     {
         "idClienteEprinsa": "26",
-        "Identificador": "almassora.opendata.h2o.fuentes.1003",
-        "Direccion": "Calle San Pablo",
-        "CoordenadaX": "39.956992",
-        "CoordenadaY": "-0.068029",
+        "Identificador": "almassora.opendata.h2o.fuentes.1025",
+        "Direccion": "Plaza de la font",
+        "CoordenadaX": "40.042146",
+        "CoordenadaY": "-0.071489",
         "Zona": "Zona Oeste",
         "Estado": "REGULAR",
         "FechaRevision": "2024-02-25",
         "BebederoMascotas": "NO",
-        "Municipio": "Almassora (Fátima)"
+        "Municipio": "Borriol"
     },
 
     {
         "idClienteEprinsa": "27",
-        "Identificador": "almassora.opendata.h2o.fuentes.1005",
-        "Direccion": "Camp Municipal Boqueres",
-        "CoordenadaX": "39.951920",
-        "CoordenadaY": "-0.063355",
+        "Identificador": "almassora.opendata.h2o.fuentes.1026",
+        "Direccion": "Pl. Alcalde Andreu",
+        "CoordenadaX": "40.059938",
+        "CoordenadaY": "-0.137675",
         "Zona": "Zona Sur",
         "Estado": "MALO",
         "FechaRevision": "",
         "BebederoMascotas": "NO",
-        "Municipio": "Almassora (Boqueras)"
+        "Municipio": "San Joan de Moro"
     },
     {
         "idClienteEprinsa": "28",
-        "Identificador": "almassora.opendata.h2o.fuentes.1006",
-        "Direccion": "Plaza Botánico Calduch",
-        "CoordenadaX": "39.949345",
-        "CoordenadaY": "-0.068007",
+        "Identificador": "almassora.opendata.h2o.fuentes.1027",
+        "Direccion": "Camino micalet",
+        "CoordenadaX": "40.082517",
+        "CoordenadaY": "0.053064",
         "Zona": "Zona Sur",
         "Estado": "MALO",
         "FechaRevision": "",
         "BebederoMascotas": "NO",
-        "Municipio": "Almassora (Botànic Calduch)"
+        "Municipio": "Benicasim (Desierto)"
     },
     {
         "idClienteEprinsa": "29",
-        "Identificador": "almassora.opendata.h2o.fuentes.1007",
-        "Direccion": "Platja de Ben-Afeli",
-        "CoordenadaX": "39.936273",
-        "CoordenadaY": "0.000418",
+        "Identificador": "almassora.opendata.h2o.fuentes.1028",
+        "Direccion": "Ermita les Santes",
+        "CoordenadaX": "40.104022",
+        "CoordenadaY": "0.037207",
         "Zona": "Zona Sur",
         "Estado": "BUENO",
         "FechaRevision": "",
         "BebederoMascotas": "SÍ",
-        "Municipio": "Almassora (La Playa)"
+        "Municipio": "Cabanes"
     },
 
     {
         "idClienteEprinsa": "30",
-        "Identificador": "almassora.opendata.h2o.fuentes.1009",
-        "Direccion": "Plaza santa Isabel",
-        "CoordenadaX": "39.946968",
-        "CoordenadaY": "-0.061099",
+        "Identificador": "almassora.opendata.h2o.fuentes.1029",
+        "Direccion": "Font de les Fosques",
+        "CoordenadaX": "39.884695",
+        "CoordenadaY": "-0.314054",
         "Zona": "Zona Este",
         "Estado": "REGULAR",
         "FechaRevision": "2024-02-25",
         "BebederoMascotas": "NO",
-        "Municipio": "Almassora (Santa Isabel)"
+        "Municipio": "Eslida"
     },
 
 
     {
         "idClienteEprinsa": "31",
-        "Identificador": "almassora.opendata.h2o.fuentes.1012",
-        "Direccion": "Calle Poligono",
-        "CoordenadaX": "39.939498",
-        "CoordenadaY": "-0.064953",
+        "Identificador": "almassora.opendata.h2o.fuentes.1030",
+        "Direccion": "Carrer Caballers",
+        "CoordenadaX": "40.137977",
+        "CoordenadaY": "-0.280330",
         "Zona": "Zona Norte",
         "Estado": "REGULAR",
         "FechaRevision": "2024-02-25",
         "BebederoMascotas": "SÍ",
-        "Municipio": "Almassora (Zona Verde)"
+        "Municipio": "Lucena"
     },
 
 
     {
         "idClienteEprinsa": "32",
-        "Identificador": "almassora.opendata.h2o.fuentes.1022",
-        "Direccion": "Pl. Iglesia",
-        "CoordenadaX": "39.940445",
-        "CoordenadaY": "-0.062294",
+        "Identificador": "almassora.opendata.h2o.fuentes.1031",
+        "Direccion": "Plaza la Aldea",
+        "CoordenadaX": "40.166409",
+        "CoordenadaY": "-0.063761",
         "Zona": "Zona Este",
         "Estado": "REGULAR",
         "FechaRevision": "2024-02-25",
         "BebederoMascotas": "SÍ",
-        "Municipio": "Almassora (La Vila)"
+        "Municipio": "Barona"
     }
 
 ]

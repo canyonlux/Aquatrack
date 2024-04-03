@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'Fuente.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Convertir en StatefulWidget
 class FuenteDetailPage extends StatefulWidget {
@@ -21,6 +22,20 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
     super.initState();
     _checkFavoriteStatus();
   }
+  Future<void> _openMap(double lat, double lng) async {
+    final String googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+    try {
+      bool launched = await launch(googleMapsUrl);
+      if (!launched) {
+        // Log o mostrar un mensaje de error si no se pudo abrir la URL
+        print('No se pudo lanzar $googleMapsUrl');
+      }
+    } catch (e) {
+      // Manejar el error
+      print('Error al abrir Google Maps: $e');
+    }
+  }
+
 
   Future<void> _checkFavoriteStatus() async {
     User? user = FirebaseAuth.instance.currentUser;
@@ -34,6 +49,7 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
       }
     }
   }
+
 
   void _toggleFavorite(BuildContext context) async {
     final User? user = FirebaseAuth.instance.currentUser;
@@ -106,26 +122,36 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Widget para mostrar la imagen
               Center(
                 child: Container(
-                  height: screenHeight / 2, // Usar la mitad de la altura de la pantalla para la imagen
-                  width: double.infinity, // Que ocupe todo el ancho posible
+                  height: screenHeight / 2,
+                  width: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage('assets/images/$imageName.png'),
-                      fit: BoxFit.cover, // Esto asegura que la imagen cubra el espacio asignado
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: 20), // Espaciado
+              SizedBox(height: 20),
               _buildInfoRow('Dirección:', widget.fuente.direccion),
               _buildInfoRow('Coordenadas:', '${widget.fuente.coordenadaX}, ${widget.fuente.coordenadaY}'),
               _buildInfoRow('Zona:', widget.fuente.zona),
               _buildInfoRow('Estado:', widget.fuente.estado),
               _buildInfoRow('Bebedero para Mascotas:', widget.fuente.bebederoMascotas),
               _buildInfoRow('Municipio:', widget.fuente.municipio),
+              SizedBox(height: 20),
+              Center(
+                child: ElevatedButton.icon(
+                  icon: Icon(Icons.directions, color: Colors.white),
+                  label: Text('Cómo llegar'),
+                  onPressed: () => _openMap(double.parse(widget.fuente.coordenadaX), double.parse(widget.fuente.coordenadaY)),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xFF0077B6), // Background color
+                  ),
+                ),
+              ),
             ],
           ),
         ),
