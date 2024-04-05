@@ -1,13 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:image_picker/image_picker.dart';
 import 'Fuente.dart';
 import 'FuentesFavoritasPage.dart';
 
 class UserProfilePage extends StatelessWidget {
   final String username;
   UserProfilePage({Key? key, required this.username}) : super(key: key);
+
+  Future<void> _pickImage(BuildContext context) async {
+    final ImagePicker picker = ImagePicker();
+    // Selecciona imagen desde la galería
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      // Aquí puedes actualizar el estado de la imagen del perfil usando, por ejemplo, un StatefulWidget o un manejador de estado como Provider, setState, etc.
+      print('Imagen seleccionada: ${image.path}');
+    }
+  }
 
   Future<List<Fuente>> getFuentesFavoritas() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -45,6 +56,11 @@ class UserProfilePage extends StatelessWidget {
               CircleAvatar(
                 radius: 100,
                 backgroundImage: AssetImage('assets/images/perfil.jpg'), // Imagen del perfil
+              ),
+              FloatingActionButton(
+                onPressed: () => _pickImage(context),
+                child: Icon(Icons.add, color: Colors.white),
+                backgroundColor: Colors.green,
               ),
               SizedBox(height: 50),
               // Nombre del usuario

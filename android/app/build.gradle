@@ -21,11 +21,11 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
-
 android {
     namespace "com.example.h2orienta"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34 // Actualizado de flutter.compileSdkVersion a 34
     ndkVersion flutter.ndkVersion
+
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
