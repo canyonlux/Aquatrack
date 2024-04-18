@@ -1,12 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:h2orienta/configuracion/theme_preferences.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'Fuente.dart';
 import 'FuentesFavoritasPage.dart';
+import 'configuracion/theme_controller.dart';
+import 'main.dart';
+
 
 class UserProfilePage extends StatelessWidget {
   final String username;
+
   UserProfilePage({Key? key, required this.username}) : super(key: key);
 
   Future<void> _pickImage(BuildContext context) async {
@@ -24,7 +30,8 @@ class UserProfilePage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return [];
 
-    final favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
+    final favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(
+        user.uid);
     final docSnapshot = await favoritesRef.get();
     final List<dynamic> favoritasIds = docSnapshot.data()?['fuentes'] ?? [];
 
@@ -38,6 +45,7 @@ class UserProfilePage extends StatelessWidget {
 
     return fuentesFavoritas;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +63,8 @@ class UserProfilePage extends StatelessWidget {
               // Imagen del perfil de usuario
               CircleAvatar(
                 radius: 100,
-                backgroundImage: AssetImage('assets/images/perfil.jpg'), // Imagen del perfil
+                backgroundImage: AssetImage(
+                    'assets/images/perfil.jpg'), // Imagen del perfil
               ),
               FloatingActionButton(
                 onPressed: () => _pickImage(context),
@@ -87,8 +96,6 @@ class UserProfilePage extends StatelessWidget {
               SizedBox(height: 10),
               _buildButton(context, 'Comentarios Realizados', Icons.comment),
               SizedBox(height: 10),
-              _buildButton(context, 'Nivel Explorador', Icons.explore),
-              SizedBox(height: 10),
               _buildButton(context, 'Configuraciones', Icons.settings),
             ],
           ),
@@ -106,8 +113,38 @@ class UserProfilePage extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => FuentesFavoritasPage()),
           );
-        } else {
-          // Aquí irían las demás condiciones para los otros botones
+        } else if (text == "Configuraciones") {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              var themeController = context.read<ThemeController>(); // Usar read ya que no necesitamos escuchar cambios aquí
+              bool isDark = themeController.themeData.brightness == Brightness.dark;
+              return AlertDialog(
+                title: Text("Configuración"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      title: Text('Modo Oscuro'),
+                      trailing: Switch(
+                        value: isDark,
+                        onChanged: (bool value) {
+                          themeController.toggleTheme(value);
+                          Navigator.of(context).pop(); // Cerrar diálogo para refrescar
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text('Cerrar'),
+                  ),
+                ],
+              );
+            },
+          );
         }
       },
       icon: Icon(icon, color: Colors.white),

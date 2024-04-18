@@ -1,9 +1,13 @@
 import 'dart:async';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'LoginPage.dart';
 import 'firebase_options.dart';
+import 'configuracion/theme_preferences.dart';
+import 'configuracion/theme_controller.dart';
+import 'package:provider/provider.dart';
+
+ValueNotifier<bool> isDarkMode = ValueNotifier(false);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,22 +17,26 @@ void main() async {
   runApp(MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AquaTrack',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Color(0xFF0077B6),
-        hintColor: Color(0xFF90E0EF),
-        fontFamily: 'Roboto',
+    // Inicializa el ThemeController con tema claro por defecto
+    return ChangeNotifierProvider(
+      create: (_) => ThemeController(ThemeData.light()),
+      child: Consumer<ThemeController>(
+        builder: (context, themeController, child) {
+          return MaterialApp(
+            title: 'AquaTrack',
+            debugShowCheckedModeBanner: false,
+            theme: themeController.themeData,
+            home: WelcomeScreen(),
+          );
+        },
       ),
-      home: WelcomeScreen(),
     );
   }
 }
-
 class WelcomeScreen extends StatefulWidget {
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
