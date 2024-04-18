@@ -9,7 +9,6 @@ import 'FuentesFavoritasPage.dart';
 import 'configuracion/theme_controller.dart';
 import 'main.dart';
 
-
 class UserProfilePage extends StatelessWidget {
   final String username;
 
@@ -21,7 +20,6 @@ class UserProfilePage extends StatelessWidget {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
-      // Aquí puedes actualizar el estado de la imagen del perfil usando, por ejemplo, un StatefulWidget o un manejador de estado como Provider, setState, etc.
       print('Imagen seleccionada: ${image.path}');
     }
   }
@@ -30,18 +28,14 @@ class UserProfilePage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return [];
 
-    final favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(
-        user.uid);
+    final favoritesRef =
+        FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
     final docSnapshot = await favoritesRef.get();
     final List<dynamic> favoritasIds = docSnapshot.data()?['fuentes'] ?? [];
 
     List<Fuente> fuentesFavoritas = [];
 
-    for (String id in favoritasIds) {
-      // Asume que tienes una función que puede obtener los datos de una fuente por su ID
-      // Aquí deberías recuperar los datos de Firestore basándote en el ID y luego
-      // construir un objeto Fuente a partir de esos datos
-    }
+    for (String id in favoritasIds) {}
 
     return fuentesFavoritas;
   }
@@ -55,7 +49,8 @@ class UserProfilePage extends StatelessWidget {
       ),
       body: Container(
         padding: EdgeInsets.all(16.0),
-        child: Center( // Centrando la interfaz
+        child: Center(
+          // Centrando la interfaz
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,8 +58,8 @@ class UserProfilePage extends StatelessWidget {
               // Imagen del perfil de usuario
               CircleAvatar(
                 radius: 100,
-                backgroundImage: AssetImage(
-                    'assets/images/perfil.jpg'), // Imagen del perfil
+                backgroundImage:
+                    AssetImage('assets/images/perfil.jpg'), // Imagen del perfil
               ),
               FloatingActionButton(
                 onPressed: () => _pickImage(context),
@@ -91,7 +86,7 @@ class UserProfilePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              // Botones con nombres sofisticados
+
               _buildButton(context, 'Fuentes Favoritas', Icons.favorite),
               SizedBox(height: 10),
               _buildButton(context, 'Comentarios Realizados', Icons.comment),
@@ -117,8 +112,10 @@ class UserProfilePage extends StatelessWidget {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              var themeController = context.read<ThemeController>(); // Usar read ya que no necesitamos escuchar cambios aquí
-              bool isDark = themeController.themeData.brightness == Brightness.dark;
+              var themeController = context.read<
+                  ThemeController>();
+              bool isDark =
+                  themeController.themeData.brightness == Brightness.dark;
               return AlertDialog(
                 title: Text("Configuración"),
                 content: Column(
@@ -130,7 +127,8 @@ class UserProfilePage extends StatelessWidget {
                         value: isDark,
                         onChanged: (bool value) {
                           themeController.toggleTheme(value);
-                          Navigator.of(context).pop(); // Cerrar diálogo para refrescar
+                          Navigator.of(context)
+                              .pop(); // Cerrar diálogo para refrescar
                         },
                       ),
                     ),

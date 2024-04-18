@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'Fuente.dart'; // Asegúrate de que este import apunta al archivo correcto donde se define la clase Fuente.
+import 'Fuente.dart';
 
 class FuentesFavoritasPage extends StatefulWidget {
   @override
@@ -31,11 +31,11 @@ class _FuentesFavoritasPageState extends State<FuentesFavoritasPage> {
     return await fetchFuentesPorDireccion(direcciones);
   }
 
-  Future<List<Fuente?>> fetchFuentesPorDireccion(List<String> direcciones) async {
+  Future<List<Fuente?>> fetchFuentesPorDireccion(
+      List<String> direcciones) async {
     List<Fuente?> fuentes = [];
 
     for (String direccion in direcciones) {
-      // Suponiendo que cada 'direccion' es un identificador único de una fuente
       var querySnapshot = await FirebaseFirestore.instance
           .collection('fuentes')
           .where(FieldPath.documentId, isEqualTo: direccion)
@@ -53,7 +53,6 @@ class _FuentesFavoritasPageState extends State<FuentesFavoritasPage> {
     return fuentes;
   }
 
-
   // Construye la UI de la página
   @override
   Widget build(BuildContext context) {
@@ -69,7 +68,9 @@ class _FuentesFavoritasPageState extends State<FuentesFavoritasPage> {
             return Center(child: CircularProgressIndicator());
           }
 
-          if (snapshot.error != null || !snapshot.hasData || snapshot.data!.isEmpty) {
+          if (snapshot.error != null ||
+              !snapshot.hasData ||
+              snapshot.data!.isEmpty) {
             return Center(child: Text('No tienes fuentes favoritas aún.'));
           }
 
@@ -92,21 +93,27 @@ class _FuentesFavoritasPageState extends State<FuentesFavoritasPage> {
     );
   }
 
-
   Widget buildFuenteCard(BuildContext context, Fuente fuente) {
-    final imageName = fuente.direccion.toLowerCase().replaceAll(' ', '_').replaceAll('á', 'a').replaceAll('é', 'e').replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u').replaceAll('ñ', 'n');
+    final imageName = fuente.direccion
+        .toLowerCase()
+        .replaceAll(' ', '_')
+        .replaceAll('á', 'a')
+        .replaceAll('é', 'e')
+        .replaceAll('í', 'i')
+        .replaceAll('ó', 'o')
+        .replaceAll('ú', 'u')
+        .replaceAll('ñ', 'n');
 
     return Card(
       clipBehavior: Clip.antiAlias, // Para dar un efecto visual más pulido
       child: Column(
         children: <Widget>[
-          Image.asset('assets/images/$imageName.png', height: 200, fit: BoxFit.cover), // Asegúrate de que las imágenes estén disponibles
+          Image.asset('assets/images/$imageName.png',
+              height: 200, fit: BoxFit.cover),
           ListTile(
             title: Text(fuente.direccion),
             subtitle: Text(fuente.direccion),
-            onTap: () {
-              // Aquí podrías implementar la navegación a la página de detalles de la fuente
-            },
+            onTap: () {},
           ),
         ],
       ),

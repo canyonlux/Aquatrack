@@ -19,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
     super.dispose();
   }
+
   Future<void> _login() async {
     try {
       final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -56,63 +57,66 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Color(0xFF0077B6), // Azul Principal para AppBar
       ),
       body: SingleChildScrollView(
-        child:Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo en la parte superior
-            Container(
-              margin: EdgeInsets.only(bottom: 20.0),
-              child: Image.asset(
-                'assets/images/loginimage.webp',
-                height: 150,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Logo en la parte superior
+              Container(
+                margin: EdgeInsets.only(bottom: 20.0),
+                child: Image.asset(
+                  'assets/images/loginimage.webp',
+                  height: 150,
+                ),
               ),
-            ),
-            // Campo de texto para el email/usuario
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Usuario',
-                // Resto de la configuración del TextField
+              // Campo de texto para el email/usuario
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Usuario',
+                  // Resto de la configuración del TextField
+                ),
               ),
-            ),
-            SizedBox(height: 20), // Espaciador
-            // Campo de texto para la contraseña
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Contraseña',
-                // Resto de la configuración del TextField
+              SizedBox(height: 20), // Espaciador
+              // Campo de texto para la contraseña
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Contraseña',
+                  // Resto de la configuración del TextField
+                ),
               ),
-            ),
-            SizedBox(height: 20), // Espaciador
-            // Botón de inicio de sesión
-            ElevatedButton(
-              onPressed: _login, // Actualizado para llamar a _login
-              child: Text('Iniciar Sesión', style: TextStyle(color: Colors.white)),
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFF00B4D8), // Azul Secundario para botones
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              SizedBox(height: 20), // Espaciador
+              // Botón de inicio de sesión
+              ElevatedButton(
+                onPressed: _login, // Actualizado para llamar a _login
+                child: Text('Iniciar Sesión',
+                    style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF00B4D8), // Azul Secundario para botones
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                ),
               ),
-            ),
-            SizedBox(height: 20), // Espaciador
-            // Botón para navegar al registro
-            ElevatedButton(
-              onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterPage())),
-              child: Text('Registrar', style: TextStyle(color: Colors.white)),
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xFF0077B6), // Azul Principal
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              SizedBox(height: 20), // Espaciador
+              // Botón para navegar al registro
+              ElevatedButton(
+                onPressed: () => Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => RegisterPage())),
+                child: Text('Registrar', style: TextStyle(color: Colors.white)),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFF0077B6), // Azul Principal
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
       backgroundColor: Color(0xFFF1F1F1), // Fondo Gris claro
     );
-
   }
 }

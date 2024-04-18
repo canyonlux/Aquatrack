@@ -26,6 +26,7 @@ class Fuente {
     required this.bebederoMascotas,
     required this.municipio,
   });
+
   factory Fuente.fromJson(Map<String, dynamic> json) {
     return Fuente(
       idClienteEprinsa: json['idClienteEprinsa'],

@@ -34,13 +34,16 @@ class _RegisterPageState extends State<RegisterPage> {
       // Mostrar mensaje de error al usuario
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.message ?? "Ocurrió un error al registrar el usuario."),
+          content:
+              Text(e.message ?? "Ocurrió un error al registrar el usuario."),
         ),
       );
     }
   }
 
-  Widget _buildTextField(TextEditingController controller, IconData icon, String label, {bool isPassword = false}) {
+  Widget _buildTextField(
+      TextEditingController controller, IconData icon, String label,
+      {bool isPassword = false}) {
     return TextField(
       controller: controller,
       obscureText: isPassword,
@@ -61,30 +64,40 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // Para evitar overflow al abrir el teclado
+        child: SingleChildScrollView(
+          // Para evitar overflow al abrir el teclado
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/registerimage.jpg', height: 250,),
+              Image.asset(
+                'assets/images/registerimage.jpg',
+                height: 250,
+              ),
               SizedBox(height: 20),
               _buildTextField(_emailController, Icons.email, ' Correo Usuario'),
               SizedBox(height: 20),
-              _buildTextField(_passwordController, Icons.lock, 'Contraseña', isPassword: true),
+              _buildTextField(_passwordController, Icons.lock, 'Contraseña',
+                  isPassword: true),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _registerAccount, // Actualizado para llamar a _registerAccount
-                child: Text('Crear Cuenta', style: TextStyle(color: Colors.white)),
+                onPressed: _registerAccount,
+                // Actualizado para llamar a _registerAccount
+                child:
+                    Text('Crear Cuenta', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF00B4D8), // Azul Secundario para botones
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
                 ),
               ),
               ElevatedButton(
-                onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage())),
+                onPressed: () => Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginPage())),
                 child: Text('Cancelar', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                   primary: Color(0xFF0077B6), // Azul Principal
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
                 ),
               ),
             ],

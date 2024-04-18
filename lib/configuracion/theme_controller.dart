@@ -18,7 +18,7 @@ class ThemeController with ChangeNotifier {
 
   void loadTheme() async {
     bool isDarkMode = await _prefs.getTheme();
-    // Asegúrate de que solo cambia si hay una preferencia guardada explícitamente
+
     if (isDarkMode) {
       _themeData = ThemeData.dark().copyWith(
         primaryColor: Colors.blueGrey[900],

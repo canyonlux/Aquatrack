@@ -17,7 +17,6 @@ void main() async {
   runApp(MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -37,6 +36,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 class WelcomeScreen extends StatefulWidget {
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
@@ -61,7 +61,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         const end = 1.0;
         const curve = Curves.ease;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
         var fadeAnimation = animation.drive(tween);
 
         return FadeTransition(

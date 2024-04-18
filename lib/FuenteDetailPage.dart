@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'Fuente.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// Convertir en StatefulWidget
+
 class FuenteDetailPage extends StatefulWidget {
   final Fuente fuente;
 
@@ -22,8 +22,10 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
     super.initState();
     _checkFavoriteStatus();
   }
+
   Future<void> _openMap(double lat, double lng) async {
-    final String googleMapsUrl = "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
+    final String googleMapsUrl =
+        "https://www.google.com/maps/search/?api=1&query=$lat,$lng";
     try {
       bool launched = await launch(googleMapsUrl);
       if (!launched) {
@@ -36,13 +38,15 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
     }
   }
 
-
   Future<void> _checkFavoriteStatus() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      DocumentReference favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
+      DocumentReference favoritesRef =
+          FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
       var doc = await favoritesRef.get();
-      if (doc.exists && (doc.data() as Map<String, dynamic>)['fuentes'].contains(widget.fuente.identificador)) {
+      if (doc.exists &&
+          (doc.data() as Map<String, dynamic>)['fuentes']
+              .contains(widget.fuente.identificador)) {
         setState(() {
           _isFavorite = true;
         });
@@ -50,16 +54,18 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
     }
   }
 
-
   void _toggleFavorite(BuildContext context) async {
     final User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Necesitas estar logueado para agregar a favoritos'),
-          backgroundColor: Color(0xFF0077B6),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Necesitas estar logueado para agregar a favoritos'),
+        backgroundColor: Color(0xFF0077B6),
+      ));
       return;
     }
 
-    final DocumentReference favoritesRef = FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
+    final DocumentReference favoritesRef =
+        FirebaseFirestore.instance.collection('favoritos').doc(user.uid);
 
     FirebaseFirestore.instance.runTransaction((transaction) async {
       final DocumentSnapshot txSnapshot = await transaction.get(favoritesRef);
@@ -68,40 +74,57 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
         throw Exception("El documento no existe!");
       }
 
-      // Asegúrate de manejar correctamente los datos como un Map<String, dynamic>
+
       final data = txSnapshot.data() as Map<String, dynamic>;
       List<dynamic> fuentes = data['fuentes'] ?? [];
       if (fuentes.contains(widget.fuente.direccion)) {
         // Si la fuente ya está en favoritos, la eliminamos
-        transaction.update(favoritesRef, {'fuentes': FieldValue.arrayRemove([widget.fuente.direccion])});
+        transaction.update(favoritesRef, {
+          'fuentes': FieldValue.arrayRemove([widget.fuente.direccion])
+        });
         setState(() => _isFavorite = false);
       } else {
         // Si la fuente no está en favoritos, la añadimos
-        transaction.update(favoritesRef, {'fuentes': FieldValue.arrayUnion([widget.fuente.direccion ])});
+        transaction.update(favoritesRef, {
+          'fuentes': FieldValue.arrayUnion([widget.fuente.direccion])
+        });
         setState(() => _isFavorite = true);
       }
     }).then((result) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(_isFavorite ? 'Añadido a favoritos' : 'Eliminado de favoritos'),
-        backgroundColor: Color(0xFF0077B6), // Azul Principal para el fondo del SnackBar
+        content: Text(
+            _isFavorite ? 'Añadido a favoritos' : 'Eliminado de favoritos'),
+        backgroundColor:
+            Color(0xFF0077B6), // Azul Principal para el fondo del SnackBar
       ));
     }).catchError((error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Error al actualizar favoritos'),
-        backgroundColor: Color(0xFF0077B6), // Azul Principal para el fondo del SnackBar
+        backgroundColor:
+            Color(0xFF0077B6), // Azul Principal para el fondo del SnackBar
       ));
     });
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     // Obtener la altura total de la pantalla
     final screenHeight = MediaQuery.of(context).size.height;
-    // Asegúrate de que el nombre de la imagen esté en minúsculas y sin espacios ni caracteres especiales.
-    final imageName = widget.fuente.municipio.split('(').last.trim().split(')').first.toLowerCase().replaceAll(' ', '_').replaceAll('á', 'a').replaceAll('é', 'e').replaceAll('í', 'i').replaceAll('ó', 'o').replaceAll('ú', 'u').replaceAll('ñ', 'n');
+
+    final imageName = widget.fuente.municipio
+        .split('(')
+        .last
+        .trim()
+        .split(')')
+        .first
+        .toLowerCase()
+        .replaceAll(' ', '_')
+        .replaceAll('á', 'a')
+        .replaceAll('é', 'e')
+        .replaceAll('í', 'i')
+        .replaceAll('ó', 'o')
+        .replaceAll('ú', 'u')
+        .replaceAll('ñ', 'n');
 
     return Scaffold(
       appBar: AppBar(
@@ -114,7 +137,7 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
             color: Colors.amber, // Color Dorado para la estrella
             iconSize: 30, // Tamaño más grande para la estrella
           ),
-      ],
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -136,17 +159,21 @@ class _FuenteDetailPageState extends State<FuenteDetailPage> {
               ),
               SizedBox(height: 20),
               _buildInfoRow('Dirección:', widget.fuente.direccion),
-              _buildInfoRow('Coordenadas:', '${widget.fuente.coordenadaX}, ${widget.fuente.coordenadaY}'),
+              _buildInfoRow('Coordenadas:',
+                  '${widget.fuente.coordenadaX}, ${widget.fuente.coordenadaY}'),
               _buildInfoRow('Zona:', widget.fuente.zona),
               _buildInfoRow('Estado:', widget.fuente.estado),
-              _buildInfoRow('Bebedero para Mascotas:', widget.fuente.bebederoMascotas),
+              _buildInfoRow(
+                  'Bebedero para Mascotas:', widget.fuente.bebederoMascotas),
               _buildInfoRow('Municipio:', widget.fuente.municipio),
               SizedBox(height: 20),
               Center(
                 child: ElevatedButton.icon(
                   icon: Icon(Icons.directions, color: Colors.white),
                   label: Text('Cómo llegar'),
-                  onPressed: () => _openMap(double.parse(widget.fuente.coordenadaX), double.parse(widget.fuente.coordenadaY)),
+                  onPressed: () => _openMap(
+                      double.parse(widget.fuente.coordenadaX),
+                      double.parse(widget.fuente.coordenadaY)),
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFF0077B6), // Background color
                   ),
