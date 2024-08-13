@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:h2orienta/MapPage.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'RegisterPage.dart';
 import 'main.dart';
 
@@ -38,6 +39,20 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(e.message ?? "Ocurrió un error al iniciar sesión."),
+        ),
+      );
+    }
+  }
+
+  // Función para abrir el enlace del patrocinador
+  void _launchURL() async {
+    final Uri url = Uri.parse('https://ac-torres.webnode.es/');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("No se pudo abrir el enlace."),
         ),
       );
     }
@@ -110,6 +125,20 @@ class _LoginPageState extends State<LoginPage> {
                   primary: Color(0xFF0077B6), // Azul Principal
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30)),
+                ),
+              ),
+              SizedBox(height: 40), // Espaciador
+              // Enlace de publicidad
+              TextButton(
+                onPressed: _launchURL,
+                child: Text(
+                  '¡Visita nuestro patrocinador! '
+                      'AC Torres',
+                  style: TextStyle(
+                    color: Colors.redAccent, // Rojo llamativo para destacar
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ],
