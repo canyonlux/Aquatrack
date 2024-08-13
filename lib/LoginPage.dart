@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
               TextButton(
                 onPressed: _launchURL,
                 child: Text(
-                  '¡Visita nuestro patrocinador! '
+                  '¡Visita nuestra patrocinadora! '
                       'AC Torres',
                   style: TextStyle(
                     color: Colors.redAccent, // Rojo llamativo para destacar
